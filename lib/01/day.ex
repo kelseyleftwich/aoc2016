@@ -90,10 +90,9 @@ defmodule Day01 do
 
   def get_directions(filename) do
     cwd = Path.dirname(__ENV__.file)
-    full_path = Path.join(cwd, filename)
 
-    full_path
-    |> File.stream!()
+    filename
+    |> InputProc.get_file_stream(cwd)
     |> Enum.take(1)
     |> List.first()
     |> String.trim()
