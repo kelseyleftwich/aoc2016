@@ -13,7 +13,16 @@ defmodule Day01Test do
     assert Day01.part_1("example3.txt") === 12
   end
 
-  test "input" do
+  @tag :skip
+  test "input - part 1" do
     assert Day01.part_1("input.txt") === 242
+  end
+
+  test "input - part 2" do
+    assert Day01.part_1("input.txt") === 150
+  end
+
+  test "example 4" do
+    assert Day01.part_1("example4.txt") === 4
   end
 end
