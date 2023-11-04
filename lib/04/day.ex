@@ -61,7 +61,7 @@ defmodule Day04 do
 
       {parsed, sector}
     end)
-    |> Stream.filter(fn {parsed, sector} ->
+    |> Stream.filter(fn {parsed, _sector} ->
       parsed
       |> String.contains?("north")
     end)
