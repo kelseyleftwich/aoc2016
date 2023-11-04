@@ -14,12 +14,22 @@ defmodule Day06 do
         |> Enum.sort(fn {_, a}, {_, b} -> a > b end)
         |> Enum.take(1)
 
-      {k, most_frequent}
+      [{least_frequent, _}] =
+        v
+        |> Enum.frequencies()
+        |> Enum.sort(fn {_, a}, {_, b} -> a < b end)
+        |> Enum.take(1)
+
+      {k, most_frequent, least_frequent}
     end)
     |> Enum.to_list()
-    |> Enum.sort(fn {a, _}, {b, _} -> a < b end)
-    |> Enum.map(fn {_, v} -> v end)
-    |> Enum.join()
+    |> Enum.sort(fn {a, _, _}, {b, _, _} -> a < b end)
+    |> Enum.map(fn {_, m, l} ->
+      {m, l}
+    end)
+    |> Enum.reduce(["", ""], fn {m, l}, [most_frequent, least_frequent] ->
+      ["#{most_frequent}#{m}", "#{least_frequent}#{l}"]
+    end)
   end
 
   def reduce_chars(chars_stream, :example) do
