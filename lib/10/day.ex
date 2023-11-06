@@ -8,6 +8,14 @@ defmodule Day10 do
     |> Enum.reduce(%{}, &process_instruction/2)
   end
 
+  def part_2() do
+    Day10.part_1("input.txt")
+    |> Map.take(["output1", "output2", "output0"])
+    |> Enum.map(fn {_id, %{values: values}} -> values end)
+    |> List.flatten()
+    |> Enum.reduce(1, &*/2)
+  end
+
   def process_instruction(instruction) do
     process_instruction(instruction, %{})
   end
@@ -41,7 +49,9 @@ defmodule Day10 do
 
     bot = "bot" <> bot
 
-    value = value |> String.to_integer()
+    value =
+      value
+      |> String.to_integer()
 
     factory
     |> Map.update(bot, %{values: [value]}, fn existing_bot ->
@@ -54,7 +64,7 @@ defmodule Day10 do
   def group_factory(factory) do
     grouped =
       factory
-      |> Enum.group_by(fn {id, rest} ->
+      |> Enum.group_by(fn {_id, rest} ->
         rest
         |> Map.get(:values, [])
         |> Enum.count()
@@ -63,7 +73,10 @@ defmodule Day10 do
         |> Kernel.&&(rest |> Map.has_key?(:low))
       end)
 
-    bots_with_less_than_two_values = grouped |> Map.get(false, [])
+    bots_with_less_than_two_values =
+      grouped
+      |> Map.get(false, [])
+
     bots_with_two_values = grouped |> Map.get(true, [])
 
     {bots_with_less_than_two_values, bots_with_two_values}
@@ -81,21 +94,21 @@ defmodule Day10 do
 
     factory =
       bots_with_two_values
-      |> Enum.map(fn bot ->
-        {id, rest} =
-          bot
+      # |> Enum.map(fn bot ->
+      #   {id, rest} =
+      #     bot
 
-        rest
-        |> Map.get(:values, [])
-        |> Enum.sort()
-        |> Kernel.==([17, 61])
-        |> if do
-          IO.inspect("FOUND #{id}")
-          exit("done")
-        end
+      #   rest
+      #   |> Map.get(:values, [])
+      #   |> Enum.sort()
+      #   |> Kernel.==([17, 61])
+      #   |> if do
+      #     IO.inspect("FOUND #{id}")
+      #     exit("done")
+      #   end
 
-        bot
-      end)
+      #   bot
+      # end)
       |> Enum.reduce(Map.new(bots_with_less_than_two_values), fn {id,
                                                                   %{
                                                                     high: high,
@@ -103,7 +116,9 @@ defmodule Day10 do
                                                                     values: values
                                                                   }},
                                                                  acc ->
-        [lower, higher] = values |> Enum.sort()
+        [lower, higher] =
+          values
+          |> Enum.sort()
 
         acc
         |> Map.update(high, %{values: [higher]}, fn existing_bot ->
